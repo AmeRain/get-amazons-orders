@@ -6,14 +6,30 @@ import com.amazonservices.mws.orders._2013_09_01.model.GetOrderRequest;
 import com.amazonservices.mws.orders._2013_09_01.model.ListOrdersRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DriverManagerDataSource;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import ru.amerain.amazonsorders.domain.services.OrderManager;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Configuration
 public class ContextConfig {
+    @Bean
+    public DriverManagerDataSource dataSource(){
+        DriverManagerDataSource dataSource = new DriverManagerDataSource();
+        dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+        dataSource.setUrl("jdbc:mysql://localhost:8080/amazons_orders");
+        dataSource.setUsername("root");
+        dataSource.setPassword("rain060896");
+        return dataSource;
+    }
+    @Bean
+    public JdbcTemplate jdbcTemplate(){
+        return new JdbcTemplate(dataSource());
+    }
 
     @Bean
     public OrderManager getOrderManager(){
@@ -53,9 +69,5 @@ public class ContextConfig {
         return new MarketplaceWebServiceOrdersAsyncClient("accessKey", "secretKey",
                           "appName", "appVersion", getConfig(), null);
     }
-//    @Bean
-//    public MVSConfiguration getMVSConfig(){
-//       return new MVSConfiguration();
-//     //  configuration.setClient();
-//    }
+
 }

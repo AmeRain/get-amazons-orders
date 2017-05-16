@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import ru.amerain.amazonsorders.data.DataManager;
+import ru.amerain.amazonsorders.data.DataSourceFabric;
 import ru.amerain.amazonsorders.domain.services.OrderManager;
 
 import java.util.List;
@@ -14,11 +16,14 @@ import java.util.List;
 public class MVSController {
     private MarketplaceWebServiceOrdersClient client;
     private OrderManager orderManager;
+    private DataManager dataManager;
 
     @Autowired
-    public MVSController(OrderManager orderManager,MarketplaceWebServiceOrdersClient client){
+    public MVSController(OrderManager orderManager, MarketplaceWebServiceOrdersClient client, DataSourceFabric dataSourceFabric){
      this.orderManager = orderManager;
      this.client = client;
+     DataSourceFabric dataSource = dataSourceFabric;
+     dataManager = dataSource.createDataSource();
     }
     @RequestMapping(value = "/get/orders/",method = RequestMethod.GET)
     public void orderCreate(){
